@@ -6,11 +6,32 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
+import initializeAuthentication from "./../Firebase/firebase.init";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+const app = initializeAuthentication();
+const auth = getAuth();
 
 export default function SignIn({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const login = () => {
+    console.log(email, password);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        console.log("signed in successfully", res);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Image
@@ -22,12 +43,21 @@ export default function SignIn({ navigation }) {
       </Text>
 
       <View style={{ paddingHorizontal: 16, paddingVertical: 25 }}>
-        <Input placeholder="Email Address" />
-        <Input placeholder="Password" secureTextEntry />
+        <Input
+          placeholder="Email Address"
+          onChangeText={(text) => setEmail(text)}
+          autoCapitalize={"none"}
+        />
+        <Input
+          placeholder="Password"
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry
+        />
       </View>
 
       <View style={styles.signUpLink}>
         <Button
+          onPress={login}
           title={"Login"}
           customStyles={{ alignSelf: "center", marginVertical: 60 }}
         />

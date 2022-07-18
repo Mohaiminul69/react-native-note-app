@@ -29,8 +29,10 @@ export default function SignUp({ navigation }) {
   const [password, setPassword] = useState("");
   const [age, setAge] = useState("");
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const signUp = async () => {
+    setLoading(true);
     try {
       const result = await createUserWithEmailAndPassword(
         auth,
@@ -50,6 +52,7 @@ export default function SignUp({ navigation }) {
         description: "User created successfully!",
         type: "success",
       });
+      setLoading(false);
     } catch (error) {
       console.log(error);
       showMessage({
@@ -57,6 +60,7 @@ export default function SignUp({ navigation }) {
         description: "Oppss!! Something went wrong",
         type: "danger",
       });
+      setLoading(false);
     }
   };
 
@@ -66,13 +70,18 @@ export default function SignUp({ navigation }) {
         <Input
           placeholder="Email Address"
           onChangeText={(text) => setEmail(text)}
+          autoCapitalize={"none"}
         />
         <Input
           placeholder="Password"
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
         />
-        <Input placeholder="Full Name" onChangeText={(text) => setName(text)} />
+        <Input
+          placeholder="Full Name"
+          onChangeText={(text) => setName(text)}
+          autoCapitalize={"words"}
+        />
         <Input placeholder="Age" onChangeText={(text) => setAge(text)} />
         <View style={{ marginVertical: 20 }}>
           <Text>Select Gender</Text>

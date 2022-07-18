@@ -8,7 +8,7 @@ import SignUp from "./src/Screens/SignUp";
 import Edit from "./src/Screens/Edit";
 import Create from "./src/Screens/Create";
 import { Fragment, useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import FlashMessage from "react-native-flash-message";
 // import { initializeApp } from "firebase/app";
 
@@ -39,6 +39,10 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
+  // useEffect(() => {
+  //   signOut(auth);
+  // }, []);
+
   useEffect(() => {
     const authSubscription = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -46,6 +50,7 @@ export default function App() {
         setLoading(false);
       } else {
         setUser(null);
+        setLoading(false);
       }
     });
     return authSubscription;
