@@ -1,3 +1,4 @@
+import initializeAuthentication from "./src/Firebase/firebase.init";
 import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
@@ -10,6 +11,7 @@ import Create from "./src/Screens/Create";
 import { Fragment, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import FlashMessage from "react-native-flash-message";
+import { getFirestore } from "firebase/firestore";
 // import { initializeApp } from "firebase/app";
 
 // const firebaseConfig = {
@@ -22,8 +24,10 @@ import FlashMessage from "react-native-flash-message";
 // };
 
 // initializeApp(firebaseConfig);
+const app = initializeAuthentication();
 
 const auth = getAuth();
+export const db = getFirestore(app);
 
 const AppTheme = {
   ...DefaultTheme,
