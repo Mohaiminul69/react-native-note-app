@@ -1,20 +1,36 @@
-import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../App";
 
 export default function Home({ navigation, route, user }) {
   const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(collection(db, "notes"), where("uid", "==", user.uid));
     const notesListenerSubscription = onSnapshot(q, (querySnapshot) => {
       const list = [];
       querySnapshot.forEach((doc) => {
-        list.push(doc.data());
+        list.push({ ...doc.data(), id: doc.id });
       });
       setNotes(list);
+      setLoading(false);
     });
 
     return notesListenerSubscription;
@@ -23,35 +39,79 @@ export default function Home({ navigation, route, user }) {
   const renderItem = ({ item }) => {
     const { title, description, color } = item;
     return (
-      <Pressable
+      <View
         style={{
           backgroundColor: color,
-          marginBottom: 25,
-          borderRadius: 16,
-          padding: 15,
+          padding: 3,
+          shadowColor: "#171717",
+          shadowOffset: { width: 2, height: 4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 3,
+          borderRadius: 10,
+          marginBottom: 15,
         }}
       >
-        <Text style={{ color: "white", fontSize: 24 }}>{title}</Text>
-        <Text style={{ color: "white", fontSize: 18, marginTop: 16 }}>
-          {description}
-        </Text>
-      </Pressable>
+        <Pressable
+          style={{
+            borderRadius: 10,
+            borderWidth: 1.5,
+            borderColor: "black",
+            borderStyle: "dashed",
+            backgroundColor: color,
+            padding: 15,
+          }}
+          onPress={() => navigation.navigate("Edit", { item })}
+        >
+          <Pressable
+            style={{
+              position: "absolute",
+              alignSelf: "flex-end",
+              padding: 15,
+              zIndex: 4,
+            }}
+            onPress={() => {
+              deleteDoc(doc(db, "notes", item.id));
+            }}
+          >
+            <AntDesign name="delete" size={24} color="white" />
+          </Pressable>
+          <Text style={{ color: "white", fontSize: 24 }}>{title}</Text>
+          <Text style={{ color: "white", fontSize: 18, marginTop: 16 }}>
+            {description}
+          </Text>
+        </Pressable>
+      </View>
     );
   };
 
   const onPressCreate = () => {
     navigation.navigate("Create");
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <ActivityIndicator color="grey" size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#E6EDF2" }}>
       <View
         style={{
           padding: 20,
+          marginHorizontal: 20,
           flexDirection: "row",
           justifyContent: "space-between",
+          alignItems: "center",
+          borderBottomWidth: 2,
+          borderBottomColor: "grey",
         }}
       >
-        <Text>My Notes</Text>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>My Notes</Text>
         <Pressable onPress={onPressCreate}>
           <AntDesign name="pluscircleo" size={24} color="black" />
         </Pressable>

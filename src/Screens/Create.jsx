@@ -7,7 +7,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../App";
 import { showMessage } from "react-native-flash-message";
 
-const noteColorOptions = ["red", "blue", "green"];
+const noteColorOptions = ["red", "blue", "green", "purple", "grey", "pink"];
 
 export default function Create({ navigation, route, user }) {
   const [title, setTitle] = useState("");
@@ -21,7 +21,13 @@ export default function Create({ navigation, route, user }) {
       await addDoc(collection(db, "notes"), {
         title: title,
         description: description,
-        color: noteColor,
+        color:
+          (noteColor == "red" && "#F26B64") ||
+          (noteColor == "blue" && "#72A5C8") ||
+          (noteColor == "green" && "#62BC5C") ||
+          (noteColor == "purple" && "#C395CE") ||
+          (noteColor == "grey" && "#606D78") ||
+          (noteColor == "pink" && "#F29FAC"),
         uid: user.uid,
       });
       setLoading(false);
