@@ -4,6 +4,7 @@ import {
   Pressable,
   SafeAreaView,
   Text,
+  Button,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -17,8 +18,12 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../App";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { getAuth, signOut } from "firebase/auth";
 
-export default function Home({ navigation, route, user }) {
+const auth = getAuth();
+
+export default function Home({ navigation, user }) {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +60,7 @@ export default function Home({ navigation, route, user }) {
           style={{
             borderRadius: 10,
             borderWidth: 1.5,
-            borderColor: "black",
+            borderColor: "white",
             borderStyle: "dashed",
             backgroundColor: color,
             padding: 15,
@@ -88,6 +93,10 @@ export default function Home({ navigation, route, user }) {
     navigation.navigate("Create");
   };
 
+  const onPressLogout = () => {
+    signOut(auth);
+  };
+
   if (loading) {
     return (
       <SafeAreaView
@@ -111,7 +120,12 @@ export default function Home({ navigation, route, user }) {
           borderBottomColor: "grey",
         }}
       >
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>My Notes</Text>
+        <Pressable onPress={onPressLogout}>
+          <SimpleLineIcons name="logout" size={23} color="black" />
+        </Pressable>
+        <Text style={{ fontSize: 26, fontWeight: "bold", marginTop: -1 }}>
+          My Notes
+        </Text>
         <Pressable onPress={onPressCreate}>
           <AntDesign name="pluscircleo" size={24} color="black" />
         </Pressable>

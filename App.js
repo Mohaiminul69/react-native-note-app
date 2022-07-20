@@ -43,10 +43,6 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   signOut(auth);
-  // }, []);
-
   useEffect(() => {
     const authSubscription = onAuthStateChanged(auth, (user) => {
       if (user) {

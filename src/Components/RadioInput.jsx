@@ -2,7 +2,24 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 
 export default function RadioInput({ label, value, setValue, size = "small" }) {
-  const isSelected = value == label;
+  const labelValue =
+    (label == "red" && "#F26B64") ||
+    (label == "blue" && "#72A5C8") ||
+    (label == "green" && "#62BC5C") ||
+    (label == "purple" && "#C395CE") ||
+    (label == "grey" && "#606D78") ||
+    (label == "pink" && "#F29FAC");
+
+  const selectedValue =
+    (value == "red" && "#F26B64") ||
+    (value == "blue" && "#72A5C8") ||
+    (value == "green" && "#62BC5C") ||
+    (value == "purple" && "#C395CE") ||
+    (value == "grey" && "#606D78") ||
+    (value == "pink" && "#F29FAC") ||
+    value;
+
+  const isSelected = selectedValue == labelValue;
   return (
     <TouchableOpacity onPress={() => setValue(label)}>
       <View style={styles.radioContainer}>
@@ -37,7 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  selectedOuterCircle: { borderColor: "orange" },
+  selectedOuterCircle: { borderColor: "#72A5C8" },
   innerCircle: {
     height: 15,
     width: 15,
@@ -46,8 +63,8 @@ const styles = StyleSheet.create({
     borderColor: "#cfcfcf",
   },
   selectedInnerCircle: {
-    borderColor: "orange",
-    backgroundColor: "orange",
+    borderColor: "#72A5C8",
+    backgroundColor: "#72A5C8",
   },
   radioText: {
     marginLeft: 10,

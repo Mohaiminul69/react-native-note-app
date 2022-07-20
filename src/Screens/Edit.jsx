@@ -34,7 +34,7 @@ export default function Edit({ navigation, route, user }) {
       });
       setLoading(false);
       showMessage({
-        message: "Note Created Successfully!",
+        message: "Note Updated Successfully!",
         type: "success",
       });
       navigation.goBack();
